@@ -1,18 +1,9 @@
 # Court Peace / Hokm
 
-Browser-based Court Peace / Hokm card game.
+## Version 2.0
 
-## Version 1.3.2.2
-
-- Played cards also appear in the center trick pile while remaining in front of each player
-- Fix trump selection by making Hakim card click proceed immediately
-- Smarter AI decisions
-- Trick history panel
-- Played cards appear in front of each player
-- Winning card highlight
-- Dealing animation / deck flash
-- Real SVG card files in `assets/cards/`
-- Counter-clockwise play order
-- Hakim selects trump by clicking one of the first 5 cards
-- Trump selection confirmation
-- First team to 7 tricks wins the hand
+- Professional rug-style table layout
+- Played cards close to the center
+- Center panel shows Hokm, Hakim, Dealer, and trick number
+- Team trick piles: face-down, separate, numbered from 1
+- Dealer is player immediately left of Hakim

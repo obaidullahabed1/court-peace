@@ -1,80 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Court Peace / Hokm</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <main class="game-table">
-    <header class="top-bar">
-      <h1>🃏 Court Peace / Hokm</h1>
-      <p id="status">Click Start Game</p>
-    </header>
-
-    <section class="scoreboard">
-      <div>Your Tricks: <span id="teamA">0</span></div>
-      <div>Your Hands: <span id="teamAHands">0</span></div>
-      <div id="trumpDisplay">Trump: Not selected</div>
-      <div>Opponent Hands: <span id="teamBHands">0</span></div>
-      <div>Opponent Tricks: <span id="teamB">0</span></div>
-    </section>
-
-    <section class="table-area">
-      <div class="player-zone partner-zone">
-        <h3 id="partnerLabel">Partner</h3>
-        <div id="partnerCards" class="back-hand horizontal"></div>
-        <div id="partnerPlayed" class="played-position partner-played"></div>
-      </div>
-
-      <div class="player-zone left-zone">
-        <h3 id="leftLabel">Left Opponent</h3>
-        <div id="leftCards" class="back-hand vertical"></div>
-        <div id="leftPlayed" class="played-position left-played"></div>
-      </div>
-
-      <div class="center-zone">
-        <h2 id="currentTurn">Hakim: You</h2>
-        <div id="kotDisplay" class="kot-box"></div>
-        <div id="deckArea" class="deck-area">
-          <img src="assets/cards/BACK.svg" alt="Deck" class="deck-card" />
-        </div>
-        <div id="centerTrickPile" class="center-trick-pile">
-          <span>Court Peace</span>
-        </div>
-        <div id="trumpButtons"></div>
-      </div>
-
-      <div class="player-zone right-zone">
-        <h3 id="rightLabel">Right Opponent</h3>
-        <div id="rightCards" class="back-hand vertical"></div>
-        <div id="rightPlayed" class="played-position right-played"></div>
-      </div>
-
-      <div class="player-zone you-zone">
-        <div id="youPlayed" class="played-position you-played"></div>
-        <h2 id="youLabel">You / Hakim</h2>
-        <div id="hand" class="player-hand"></div>
-      </div>
-    </section>
-
-    <div class="history-panel">
-      <h3>Trick History</h3>
-      <div id="historyList">No tricks yet.</div>
-    </div>
-
-    <div class="controls">
-      <button id="startBtn" onclick="startGame()">Start Game</button>
-      <button id="newHandBtn" onclick="startNextHand()" disabled>Next Hand</button>
-    </div>
-  </main>
-
-  <script src="js/deck.js"></script>
-  <script src="js/players.js"></script>
-  <script src="js/ai.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/script.js"></script>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Court Peace / Hokm</title><link rel="stylesheet" href="style.css"/></head>
+<body><main class="app">
+<aside class="score"><h2 class="green">YOUR TEAM</h2><p>Hands Won <b id="teamAHands">0</b></p><p>Current Tricks <b id="teamA">0</b></p><hr><h2 id="sideTrump">HOKM: Not selected</h2><p>Hakim <b id="hakimName">You</b></p><p>Dealer <b id="dealerName">Left Opponent</b></p><hr><div class="vs">VS</div><hr><h2 class="red">OPPONENT TEAM</h2><p>Hands Won <b id="teamBHands">0</b></p><p>Current Tricks <b id="teamB">0</b></p></aside>
+<section class="main"><header><h1>🃏 Court Peace / Hokm</h1><p id="status">Click Start Game</p></header>
+<div class="table">
+<div class="player partner"><h3 id="partnerLabel">Partner</h3><div id="partnerCards" class="backs row"></div></div>
+<div class="player left"><h3 id="leftLabel">Left Opponent</h3><div id="leftCards" class="backs col"></div></div>
+<div class="player right"><h3 id="rightLabel">Right Opponent</h3><div id="rightCards" class="backs col"></div></div>
+<div class="player you"><h3 id="youLabel">You / Hakim</h3><div id="hand" class="hand"></div></div>
+<div id="partnerPlayed" class="played partnerPlayed"></div><div id="leftPlayed" class="played leftPlayed"></div><div id="rightPlayed" class="played rightPlayed"></div><div id="youPlayed" class="played youPlayed"></div>
+<div class="center"><img src="assets/cards/BACK.svg" class="deck-card"/><div class="circle"><span>HOKM / TRUMP</span><strong id="trumpDisplay">Not selected</strong><p>Hakim: <b id="centerHakim">You</b></p><p>Dealer: <b id="centerDealer">Left Opponent</b></p><p>Trick: <b id="trickNumber">1</b> of 13</p></div><div id="kotDisplay"></div><div id="trumpButtons"></div></div>
+<div class="pile yourPile"><h4>Your Team Tricks</h4><div id="yourTeamPile"></div><b>Total: <span id="yourPileTotal">0</span></b></div>
+<div class="pile opponentPile"><h4>Opponent Tricks</h4><div id="opponentPile"></div><b>Total: <span id="opponentPileTotal">0</span></b></div>
+</div>
+<section class="history"><h3>Trick History</h3><div id="historyList">No tricks yet.</div></section>
+<button id="startBtn" onclick="startGame()">Start Game</button><button id="newHandBtn" onclick="startNextHand()" disabled>Next Hand</button>
+</section></main>
+<script src="js/deck.js"></script><script src="js/players.js"></script><script src="js/ai.js"></script><script src="js/game.js"></script><script src="js/ui.js"></script><script src="js/script.js"></script></body></html>

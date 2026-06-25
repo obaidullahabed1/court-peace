@@ -1,7 +1,1 @@
-updateStatus("Click Start Game");
-updateTrumpDisplay();
-updateScores();
-updateCurrentTurn();
-updateButtons();
-renderTableCards();
-renderHistory();
+updateStatus("Click Start Game");updateAllUI();
