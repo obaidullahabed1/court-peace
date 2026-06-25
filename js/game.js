@@ -13,11 +13,6 @@ let handIsOver = false;
 let gamePhase = "waiting";
 let lastHandWinnerTeam = null;
 
-// Counter-clockwise order:
-// 0 = You
-// 3 = Right Opponent
-// 2 = Partner
-// 1 = Left Opponent
 const playOrder = [0, 3, 2, 1];
 
 function nextPlayer(playerIndex) {
@@ -55,7 +50,7 @@ function startNewHand() {
     players[hakimIndex].hand.push(gameDeck.pop());
   }
 
-  updateStatus(players[hakimIndex].name + " is Hakim. Select trump.");
+  clearTrumpButtons();
   updateTrumpDisplay();
   updateScores();
   updateCurrentTurn();
@@ -65,10 +60,19 @@ function startNewHand() {
   renderAllHands();
 
   if (hakimIndex === 0) {
-    showTrumpButtons();
+    updateStatus("You are Hakim. Click one of your 5 cards to choose trump.");
   } else {
+    updateStatus(players[hakimIndex].name + " is Hakim. AI is choosing trump.");
     setTimeout(autoSelectTrumpForAI, 900);
   }
+}
+
+function selectTrumpFromCard(cardIndex) {
+  if (gamePhase !== "selectTrump") return;
+  if (hakimIndex !== 0) return;
+
+  const selectedCard = players[0].hand[cardIndex];
+  selectTrump(selectedCard.suit);
 }
 
 function autoSelectTrumpForAI() {

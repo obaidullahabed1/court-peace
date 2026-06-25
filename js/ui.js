@@ -41,13 +41,7 @@ function updateKotDisplay(message) {
 }
 
 function showTrumpButtons() {
-  document.getElementById("trumpButtons").innerHTML = `
-    <h3>Select Hokm / Trump</h3>
-    <button onclick="selectTrump('♠')">♠ Spades</button>
-    <button onclick="selectTrump('♥')">♥ Hearts</button>
-    <button onclick="selectTrump('♦')">♦ Diamonds</button>
-    <button onclick="selectTrump('♣')">♣ Clubs</button>
-  `;
+  document.getElementById("trumpButtons").innerHTML = "";
 }
 
 function clearTrumpButtons() {
@@ -71,7 +65,10 @@ function renderPlayerHand() {
     img.src = card.image || getCardImagePath(card);
     img.alt = card.name;
 
-    if (gamePhase === "playing" && currentPlayerIndex === 0 && isLegalPlay(players[0], card)) {
+    if (gamePhase === "selectTrump" && hakimIndex === 0) {
+      img.classList.add("playable");
+      img.onclick = () => selectTrumpFromCard(index);
+    } else if (gamePhase === "playing" && currentPlayerIndex === 0 && isLegalPlay(players[0], card)) {
       img.classList.add("playable");
       img.onclick = () => playHumanCard(index);
     } else if (gamePhase === "playing" && currentPlayerIndex === 0) {
