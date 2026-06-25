@@ -14,9 +14,11 @@
     </header>
 
     <section class="scoreboard">
-      <div>Your Team Tricks: <span id="teamA">0</span></div>
+      <div>Your Tricks: <span id="teamA">0</span></div>
+      <div>Your Hands: <span id="teamAHands">0</span></div>
       <div id="trumpDisplay">Trump: Not selected</div>
-      <div>Opponent Team Tricks: <span id="teamB">0</span></div>
+      <div>Opponent Hands: <span id="teamBHands">0</span></div>
+      <div>Opponent Tricks: <span id="teamB">0</span></div>
     </section>
 
     <section class="table-area">
@@ -32,6 +34,7 @@
 
       <div class="center-zone">
         <h2 id="currentTurn">Hakim: You</h2>
+        <div id="kotDisplay" class="kot-box"></div>
         <div id="tableCards" class="played-cards">Playing Area</div>
         <div id="trumpButtons"></div>
       </div>
@@ -47,7 +50,10 @@
       </div>
     </section>
 
-    <button id="startBtn" onclick="startGame()">Start Game</button>
+    <div class="controls">
+      <button id="startBtn" onclick="startGame()">Start Game</button>
+      <button id="newHandBtn" onclick="startNextHand()" disabled>Next Hand</button>
+    </div>
   </main>
 
   <script src="js/deck.js"></script>

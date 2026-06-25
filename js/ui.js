@@ -11,6 +11,8 @@ function updateTrumpDisplay() {
 function updateScores() {
   document.getElementById("teamA").innerText = teamATricks;
   document.getElementById("teamB").innerText = teamBTricks;
+  document.getElementById("teamAHands").innerText = teamAHands;
+  document.getElementById("teamBHands").innerText = teamBHands;
 }
 
 function updateCurrentTurn() {
@@ -18,6 +20,8 @@ function updateCurrentTurn() {
 
   if (gamePhase === "handOver") {
     turnElement.innerText = "Hand Over";
+  } else if (gamePhase === "selectTrump") {
+    turnElement.innerText = "Hakim: " + players[hakimIndex].name;
   } else {
     turnElement.innerText = "Current Turn: " + players[currentPlayerIndex].name;
   }
@@ -26,6 +30,14 @@ function updateCurrentTurn() {
   document.getElementById("leftLabel").classList.toggle("active-player", currentPlayerIndex === 1);
   document.getElementById("partnerLabel").classList.toggle("active-player", currentPlayerIndex === 2);
   document.getElementById("rightLabel").classList.toggle("active-player", currentPlayerIndex === 3);
+}
+
+function updateButtons() {
+  document.getElementById("newHandBtn").disabled = gamePhase !== "handOver";
+}
+
+function updateKotDisplay(message) {
+  document.getElementById("kotDisplay").innerText = message;
 }
 
 function showTrumpButtons() {

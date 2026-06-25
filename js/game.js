@@ -2,14 +2,30 @@ let gameDeck = [];
 let trumpSuit = "";
 let teamATricks = 0;
 let teamBTricks = 0;
+let teamAHands = 0;
+let teamBHands = 0;
+
 let hakimIndex = 0;
 let currentPlayerIndex = 0;
 let currentTrick = [];
 let leadSuit = null;
 let handIsOver = false;
 let gamePhase = "waiting";
+let lastHandWinnerTeam = null;
 
 function startGame() {
+  teamAHands = 0;
+  teamBHands = 0;
+  hakimIndex = 0;
+  startNewHand();
+}
+
+function startNextHand() {
+  if (gamePhase !== "handOver") return;
+  startNewHand();
+}
+
+function startNewHand() {
   gameDeck = shuffleDeck(createDeck());
   trumpSuit = "";
   teamATricks = 0;
@@ -19,6 +35,7 @@ function startGame() {
   leadSuit = null;
   handIsOver = false;
   gamePhase = "selectTrump";
+  lastHandWinnerTeam = null;
 
   resetPlayers();
 
@@ -26,17 +43,45 @@ function startGame() {
     players[hakimIndex].hand.push(gameDeck.pop());
   }
 
-  updateStatus("Hakim received 5 cards. Select trump.");
+  updateStatus(players[hakimIndex].name + " is Hakim. Select trump.");
   updateTrumpDisplay();
   updateScores();
   updateCurrentTurn();
+  updateButtons();
+  updateKotDisplay("");
   renderTableCards();
   renderAllHands();
-  showTrumpButtons();
+
+  if (hakimIndex === 0) {
+    showTrumpButtons();
+  } else {
+    setTimeout(autoSelectTrumpForAI, 900);
+  }
+}
+
+function autoSelectTrumpForAI() {
+  if (gamePhase !== "selectTrump") return;
+
+  const hakim = players[hakimIndex];
+  const suitCounts = { "♠": 0, "♥": 0, "♦": 0, "♣": 0 };
+
+  hakim.hand.forEach(card => {
+    suitCounts[card.suit]++;
+  });
+
+  let bestSuit = "♠";
+  for (const suit of suits) {
+    if (suitCounts[suit] > suitCounts[bestSuit]) {
+      bestSuit = suit;
+    }
+  }
+
+  selectTrump(bestSuit);
 }
 
 function selectTrump(suit) {
   if (gamePhase !== "selectTrump") return;
+
   trumpSuit = suit;
 
   while (players.some(player => player.hand.length < 13)) {
@@ -48,18 +93,20 @@ function selectTrump(suit) {
   }
 
   players.forEach(player => sortPlayerHand(player.hand));
+
   gamePhase = "playing";
   currentPlayerIndex = hakimIndex;
 
-  updateStatus("Trump selected. You lead first. Click a card to play.");
+  updateStatus("Trump selected: " + trumpSuit + ". " + players[currentPlayerIndex].name + " leads.");
   updateTrumpDisplay();
   updateScores();
   updateCurrentTurn();
+  updateButtons();
   clearTrumpButtons();
   renderAllHands();
 
   if (currentPlayerIndex !== 0) {
-    setTimeout(playAiTurn, 800);
+    setTimeout(playAiTurn, 900);
   }
 }
 
@@ -199,12 +246,41 @@ function endHand() {
   handIsOver = true;
   gamePhase = "handOver";
 
-  const winnerText = teamATricks >= 7
-    ? "Your team wins the hand!"
-    : "Opponent team wins the hand!";
+  const winningTeam = teamATricks >= 7 ? "A" : "B";
+  lastHandWinnerTeam = winningTeam;
 
-  updateStatus(winnerText + " Click Start Game for a new hand.");
+  let kot = false;
+
+  if (winningTeam === "A") {
+    teamAHands++;
+    kot = teamBTricks === 0;
+  } else {
+    teamBHands++;
+    kot = teamATricks === 0;
+  }
+
+  if (kot) {
+    updateKotDisplay("KOT! " + (winningTeam === "A" ? "Your team" : "Opponent team") + " won 7 tricks while the other team had 0.");
+  } else {
+    updateKotDisplay("");
+  }
+
+  rotateHakimAfterHand(winningTeam);
+
+  updateScores();
+  updateStatus((winningTeam === "A" ? "Your team" : "Opponent team") + " wins the hand. Click Next Hand.");
   updateCurrentTurn();
+  updateButtons();
+}
+
+function rotateHakimAfterHand(winningTeam) {
+  const winningPlayerIndexes = players
+    .filter(player => player.team === winningTeam)
+    .map(player => player.id);
+
+  if (!winningPlayerIndexes.includes(hakimIndex)) {
+    hakimIndex = (hakimIndex + 1) % 4;
+  }
 }
 
 function sortPlayerHand(hand) {
