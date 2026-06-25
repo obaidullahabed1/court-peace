@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle, #16803a, #063d1d);
+  color: white;
+  text-align: center;
+}
+
+.table {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+header h1 {
+  margin-bottom: 5px;
+}
+
+.players {
+  display: grid;
+  grid-template-areas:
+    ". top ."
+    "left center right";
+  gap: 20px;
+  align-items: center;
+  margin: 30px auto;
+  max-width: 900px;
+}
+
+.player {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  border-radius: 15px;
+}
+
+.top { grid-area: top; }
+.left { grid-area: left; }
+.right { grid-area: right; }
+.center {
+  grid-area: center;
+  min-height: 150px;
+}
+
+.hand-area {
+  margin-top: 30px;
+}
+
+.hand {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card {
+  width: 80px;
+  height: 115px;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.red {
+  color: #c1121f;
+}
+
+button {
+  padding: 12px 18px;
+  margin: 8px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
