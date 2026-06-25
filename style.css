@@ -1,84 +1,203 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: radial-gradient(circle, #16803a, #063d1d);
   color: white;
+  background: radial-gradient(circle, #16843a, #063d1d);
+  overflow-x: hidden;
+}
+
+.game-table {
+  min-height: 100vh;
+  padding: 14px;
   text-align: center;
 }
 
-.table {
-  min-height: 100vh;
-  padding: 20px;
+.top-bar h1 {
+  margin: 0;
+  font-size: 30px;
 }
 
-header h1 {
-  margin-bottom: 5px;
+#status {
+  margin: 6px 0 10px;
+  font-weight: bold;
 }
 
-.players {
+.scoreboard {
+  max-width: 850px;
+  margin: 0 auto 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: bold;
+}
+
+.table-area {
+  width: 100%;
+  min-height: 720px;
   display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  grid-template-rows: 150px 300px 230px;
   grid-template-areas:
-    ". top ."
-    "left center right";
-  gap: 20px;
+    ". partner ."
+    "left center right"
+    ". you .";
+  gap: 12px;
   align-items: center;
-  margin: 30px auto;
-  max-width: 900px;
 }
 
-.player {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 25px;
-  border-radius: 15px;
+.partner-zone {
+  grid-area: partner;
 }
 
-.top { grid-area: top; }
-.left { grid-area: left; }
-.right { grid-area: right; }
-.center {
+.left-zone {
+  grid-area: left;
+}
+
+.right-zone {
+  grid-area: right;
+}
+
+.center-zone {
   grid-area: center;
-  min-height: 150px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.hand-area {
-  margin-top: 30px;
+.you-zone {
+  grid-area: you;
 }
 
-.hand {
+.player-zone h2,
+.player-zone h3 {
+  margin: 5px;
+}
+
+.player-hand {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  gap: 6px;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 10px;
 }
 
 .card {
-  width: 80px;
-  height: 115px;
+  width: 72px;
+  height: 105px;
   background: white;
   color: black;
   border-radius: 10px;
   border: 2px solid #ddd;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+  box-shadow: 0 7px 12px rgba(0, 0, 0, 0.45);
+  flex-shrink: 0;
 }
 
-.red {
+.card.red {
   color: #c1121f;
+}
+
+.card:hover {
+  transform: translateY(-12px);
+  cursor: pointer;
+}
+
+.card-back {
+  width: 54px;
+  height: 78px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #163fa8, #071b55);
+  border: 2px solid white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.45);
+  flex-shrink: 0;
+}
+
+.horizontal {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.vertical .card-back {
+  margin-top: -48px;
+}
+
+.vertical .card-back:first-child {
+  margin-top: 0;
+}
+
+.played-cards {
+  width: 260px;
+  min-height: 120px;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px;
+  background: rgba(0, 0, 0, 0.18);
 }
 
 button {
   padding: 12px 18px;
-  margin: 8px;
-  font-size: 16px;
+  margin: 6px;
   border: none;
-  border-radius: 8px;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
 }
 
 button:hover {
   transform: scale(1.05);
+}
+
+@media (max-width: 900px) {
+  .table-area {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "partner"
+      "left"
+      "center"
+      "right"
+      "you";
+  }
+
+  .vertical {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .vertical .card-back {
+    margin-top: 0;
+  }
+
+  .scoreboard {
+    flex-direction: column;
+  }
 }
