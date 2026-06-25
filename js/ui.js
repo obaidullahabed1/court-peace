@@ -45,7 +45,8 @@ function renderPlayerHand() {
       cardDiv.classList.add("red");
     }
 
-    cardDiv.innerText = card.name;
+    cardDiv.setAttribute("data-card", card.name);
+    cardDiv.innerText = card.suit;
     handDiv.appendChild(cardDiv);
   });
 }

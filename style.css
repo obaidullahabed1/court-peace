@@ -27,14 +27,14 @@ body {
 }
 
 .scoreboard {
-  max-width: 850px;
-  margin: 0 auto 10px;
+  max-width: 900px;
+  margin: 0 auto 12px;
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.28);
   padding: 12px 18px;
-  border-radius: 14px;
+  border-radius: 16px;
   font-weight: bold;
 }
 
@@ -42,8 +42,8 @@ body {
   width: 100%;
   min-height: 720px;
   display: grid;
-  grid-template-columns: 220px 1fr 220px;
-  grid-template-rows: 150px 300px 230px;
+  grid-template-columns: 240px 1fr 240px;
+  grid-template-rows: 160px 310px 240px;
   grid-template-areas:
     ". partner ."
     "left center right"
@@ -52,29 +52,18 @@ body {
   align-items: center;
 }
 
-.partner-zone {
-  grid-area: partner;
-}
-
-.left-zone {
-  grid-area: left;
-}
-
-.right-zone {
-  grid-area: right;
-}
+.partner-zone { grid-area: partner; }
+.left-zone { grid-area: left; }
+.right-zone { grid-area: right; }
+.center-zone { grid-area: center; }
+.you-zone { grid-area: you; }
 
 .center-zone {
-  grid-area: center;
-  min-height: 260px;
+  min-height: 270px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.you-zone {
-  grid-area: you;
 }
 
 .player-zone h2,
@@ -87,26 +76,49 @@ body {
   justify-content: center;
   align-items: flex-end;
   flex-wrap: nowrap;
-  gap: 6px;
   max-width: 100%;
   overflow-x: auto;
-  padding: 10px;
+  padding: 18px 10px;
 }
 
 .card {
-  width: 72px;
-  height: 105px;
-  background: white;
-  color: black;
-  border-radius: 10px;
-  border: 2px solid #ddd;
+  width: 78px;
+  height: 112px;
+  background: linear-gradient(145deg, #ffffff, #f3f3f3);
+  color: #111;
+  border-radius: 11px;
+  border: 2px solid #e6e6e6;
   font-size: 24px;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 7px 12px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.45);
   flex-shrink: 0;
+  margin-left: -22px;
+  position: relative;
+  transition: 0.2s ease;
+}
+
+.card:first-child {
+  margin-left: 0;
+}
+
+.card::before {
+  content: attr(data-card);
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 17px;
+}
+
+.card::after {
+  content: attr(data-card);
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 17px;
+  transform: rotate(180deg);
 }
 
 .card.red {
@@ -114,36 +126,50 @@ body {
 }
 
 .card:hover {
-  transform: translateY(-12px);
+  transform: translateY(-18px) scale(1.04);
+  z-index: 10;
   cursor: pointer;
 }
 
 .card-back {
-  width: 54px;
-  height: 78px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #163fa8, #071b55);
-  border: 2px solid white;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.45);
+  width: 56px;
+  height: 82px;
+  border-radius: 9px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #123c9c,
+      #123c9c 6px,
+      #0a246a 6px,
+      #0a246a 12px
+    );
+  border: 3px solid white;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.45);
   flex-shrink: 0;
 }
 
 .horizontal {
   display: flex;
   justify-content: center;
-  gap: 4px;
   flex-wrap: nowrap;
+}
+
+.horizontal .card-back {
+  margin-left: -22px;
+}
+
+.horizontal .card-back:first-child {
+  margin-left: 0;
 }
 
 .vertical {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
 }
 
 .vertical .card-back {
-  margin-top: -48px;
+  margin-top: -52px;
 }
 
 .vertical .card-back:first-child {
@@ -151,15 +177,15 @@ body {
 }
 
 .played-cards {
-  width: 260px;
-  min-height: 120px;
-  border: 2px dashed rgba(255, 255, 255, 0.5);
-  border-radius: 18px;
+  width: 300px;
+  min-height: 135px;
+  border: 2px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 12px;
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 button {
@@ -195,6 +221,7 @@ button:hover {
 
   .vertical .card-back {
     margin-top: 0;
+    margin-left: -22px;
   }
 
   .scoreboard {
