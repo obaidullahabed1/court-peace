@@ -13,6 +13,18 @@ let handIsOver = false;
 let gamePhase = "waiting";
 let lastHandWinnerTeam = null;
 
+// Counter-clockwise order:
+// 0 = You
+// 3 = Right Opponent
+// 2 = Partner
+// 1 = Left Opponent
+const playOrder = [0, 3, 2, 1];
+
+function nextPlayer(playerIndex) {
+  const currentPosition = playOrder.indexOf(playerIndex);
+  return playOrder[(currentPosition + 1) % playOrder.length];
+}
+
 function startGame() {
   teamAHands = 0;
   teamBHands = 0;
@@ -70,6 +82,7 @@ function autoSelectTrumpForAI() {
   });
 
   let bestSuit = "♠";
+
   for (const suit of suits) {
     if (suitCounts[suit] > suitCounts[bestSuit]) {
       bestSuit = suit;
@@ -85,7 +98,9 @@ function selectTrump(suit) {
   trumpSuit = suit;
 
   while (players.some(player => player.hand.length < 13)) {
-    for (const player of players) {
+    for (const playerIndex of playOrder) {
+      const player = players[playerIndex];
+
       if (player.hand.length < 13) {
         player.hand.push(gameDeck.pop());
       }
@@ -131,6 +146,7 @@ function playAiTurn() {
 
   const player = players[currentPlayerIndex];
   const cardIndex = chooseAiCardIndex(player);
+
   playCard(currentPlayerIndex, cardIndex);
   continueAfterPlay();
 }
@@ -143,7 +159,11 @@ function playCard(playerIndex, cardIndex) {
     leadSuit = card.suit;
   }
 
-  currentTrick.push({ playerIndex, card });
+  currentTrick.push({
+    playerIndex,
+    card
+  });
+
   updateStatus(players[playerIndex].name + " played " + card.name);
   renderAllHands();
   renderTableCards();
@@ -155,7 +175,7 @@ function continueAfterPlay() {
     return;
   }
 
-  currentPlayerIndex = (currentPlayerIndex + 1) % 4;
+  currentPlayerIndex = nextPlayer(currentPlayerIndex);
   updateCurrentTurn();
 
   if (currentPlayerIndex !== 0) {
@@ -229,16 +249,26 @@ function doesCardBeat(card, currentWinnerCard) {
 
 function isLegalPlay(player, card) {
   if (currentTrick.length === 0) return true;
+
   const hasLeadSuit = player.hand.some(handCard => handCard.suit === leadSuit);
-  return !(hasLeadSuit && card.suit !== leadSuit);
+
+  if (hasLeadSuit && card.suit !== leadSuit) {
+    return false;
+  }
+
+  return true;
 }
 
 function chooseAiCardIndex(player) {
   const legalCards = player.hand
-    .map((card, index) => ({ card, index }))
+    .map((card, index) => ({
+      card,
+      index
+    }))
     .filter(item => isLegalPlay(player, item.card));
 
   legalCards.sort((a, b) => rankPower[a.card.rank] - rankPower[b.card.rank]);
+
   return legalCards[0].index;
 }
 
@@ -260,7 +290,11 @@ function endHand() {
   }
 
   if (kot) {
-    updateKotDisplay("KOT! " + (winningTeam === "A" ? "Your team" : "Opponent team") + " won 7 tricks while the other team had 0.");
+    updateKotDisplay(
+      "KOT! " +
+      (winningTeam === "A" ? "Your team" : "Opponent team") +
+      " won 7 tricks while the other team had 0."
+    );
   } else {
     updateKotDisplay("");
   }
@@ -268,7 +302,11 @@ function endHand() {
   rotateHakimAfterHand(winningTeam);
 
   updateScores();
-  updateStatus((winningTeam === "A" ? "Your team" : "Opponent team") + " wins the hand. Click Next Hand.");
+  updateStatus(
+    (winningTeam === "A" ? "Your team" : "Opponent team") +
+    " wins the hand. Click Next Hand."
+  );
+
   updateCurrentTurn();
   updateButtons();
 }
@@ -279,22 +317,39 @@ function rotateHakimAfterHand(winningTeam) {
     .map(player => player.id);
 
   if (!winningPlayerIndexes.includes(hakimIndex)) {
-    hakimIndex = (hakimIndex + 1) % 4;
+    hakimIndex = nextPlayer(hakimIndex);
   }
 }
 
 function sortPlayerHand(hand) {
-  const suitOrder = { "♠": 1, "♥": 2, "♦": 3, "♣": 4 };
+  const suitOrder = {
+    "♠": 1,
+    "♥": 2,
+    "♦": 3,
+    "♣": 4
+  };
+
   const rankOrder = {
-    "A": 1, "K": 2, "Q": 3, "J": 4, "10": 5,
-    "9": 6, "8": 7, "7": 8, "6": 9, "5": 10,
-    "4": 11, "3": 12, "2": 13
+    "A": 1,
+    "K": 2,
+    "Q": 3,
+    "J": 4,
+    "10": 5,
+    "9": 6,
+    "8": 7,
+    "7": 8,
+    "6": 9,
+    "5": 10,
+    "4": 11,
+    "3": 12,
+    "2": 13
   };
 
   hand.sort((a, b) => {
     if (suitOrder[a.suit] !== suitOrder[b.suit]) {
       return suitOrder[a.suit] - suitOrder[b.suit];
     }
+
     return rankOrder[a.rank] - rankOrder[b.rank];
   });
 }
