@@ -7,11 +7,31 @@ const rankPower = {
   "4": 4, "3": 3, "2": 2
 };
 
+function getCardFileName(card) {
+  const suitCode = {
+    "♠": "S",
+    "♥": "H",
+    "♦": "D",
+    "♣": "C"
+  };
+
+  return card.rank + suitCode[card.suit] + ".svg";
+}
+
+function getCardImagePath(card) {
+  return "assets/cards/" + getCardFileName(card);
+}
+
 function createDeck() {
   const deck = [];
   for (const suit of suits) {
     for (const rank of ranks) {
-      deck.push({ rank, suit, name: rank + suit });
+      deck.push({
+        rank,
+        suit,
+        name: rank + suit,
+        image: "assets/cards/" + rank + ({ "♠": "S", "♥": "H", "♦": "D", "♣": "C" }[suit]) + ".svg"
+      });
     }
   }
   return deck;

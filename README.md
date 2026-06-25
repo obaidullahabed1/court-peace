@@ -2,8 +2,10 @@
 
 Browser-based Court Peace / Hokm card game.
 
-## Version 0.6
+## Version 0.8
 
+- Real SVG card files in `assets/cards/`
+- Counter-clockwise play order
 - Four-player layout
 - Hakim receives 5 cards first
 - Trump selection
