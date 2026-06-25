@@ -15,6 +15,7 @@ let lastHandWinnerTeam = null;
 
 let pendingTrumpCardIndex = null;
 let pendingTrumpSuit = "";
+let winningCardPlayerIndex = null;
 
 const playOrder = [0, 3, 2, 1];
 
@@ -52,6 +53,7 @@ async function startNewHand() {
   lastHandWinnerTeam = null;
   pendingTrumpCardIndex = null;
   pendingTrumpSuit = "";
+  winningCardPlayerIndex = null;
 
   resetPlayers();
   clearTrumpButtons();
@@ -253,37 +255,43 @@ function finishTrick() {
   const winningPlay = getTrickWinner();
   const winningPlayer = players[winningPlay.playerIndex];
 
-  if (winningPlayer.team === "A") {
-    teamATricks++;
-  } else {
-    teamBTricks++;
-  }
-
-  updateScores();
-  updateStatus(winningPlayer.name + " won the trick.");
-
-  currentPlayerIndex = winningPlay.playerIndex;
-  currentTrick = [];
-  leadSuit = null;
-
+  winningCardPlayerIndex = winningPlay.playerIndex;
   renderTableCards();
-  renderAllHands();
 
-  if (teamATricks >= 7 || teamBTricks >= 7) {
-    endHand();
-    return;
-  }
+  setTimeout(() => {
+    if (winningPlayer.team === "A") {
+      teamATricks++;
+    } else {
+      teamBTricks++;
+    }
 
-  updateCurrentTurn();
+    updateScores();
+    updateStatus(winningPlayer.name + " won the trick.");
 
-  if (currentPlayerIndex !== 0) {
-    setTimeout(playAiTurn, 1200);
-  } else {
-    setTimeout(() => {
-      updateStatus("You won the trick. Lead the next card.");
-      renderAllHands();
-    }, 600);
-  }
+    currentPlayerIndex = winningPlay.playerIndex;
+    currentTrick = [];
+    leadSuit = null;
+    winningCardPlayerIndex = null;
+
+    renderTableCards();
+    renderAllHands();
+
+    if (teamATricks >= 7 || teamBTricks >= 7) {
+      endHand();
+      return;
+    }
+
+    updateCurrentTurn();
+
+    if (currentPlayerIndex !== 0) {
+      setTimeout(playAiTurn, 1200);
+    } else {
+      setTimeout(() => {
+        updateStatus("You won the trick. Lead the next card.");
+        renderAllHands();
+      }, 600);
+    }
+  }, 900);
 }
 
 function getTrickWinner() {

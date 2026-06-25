@@ -2,8 +2,10 @@
 
 Browser-based Court Peace / Hokm card game.
 
-## Version 1.1
+## Version 1.2
 
+- Played cards appear in front of each player
+- Winning card highlight
 - Dealing animation / deck flash
 - Real SVG card files in `assets/cards/`
 - Counter-clockwise play order

@@ -41,8 +41,8 @@ body {
   width: 100%;
   min-height: 740px;
   display: grid;
-  grid-template-columns: 240px 1fr 240px;
-  grid-template-rows: 160px 330px 240px;
+  grid-template-columns: 260px 1fr 260px;
+  grid-template-rows: 180px 330px 250px;
   grid-template-areas:
     ". partner ."
     "left center right"
@@ -56,6 +56,11 @@ body {
 .right-zone { grid-area: right; }
 .center-zone { grid-area: center; }
 .you-zone { grid-area: you; }
+
+.player-zone {
+  position: relative;
+  min-height: 150px;
+}
 
 .center-zone {
   min-height: 300px;
@@ -99,6 +104,21 @@ body {
 @keyframes dealFlash {
   from { transform: translateY(-10px) scale(0.88); opacity: 0.35; }
   to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.center-title {
+  min-width: 220px;
+  min-height: 120px;
+  border: 2px dashed rgba(255,255,255,0.35);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.75);
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background: rgba(0,0,0,0.12);
 }
 
 .player-hand {
@@ -171,40 +191,53 @@ body {
 
 .vertical .card-back-img:first-child { margin-top: 0; }
 
-.played-cards {
-  width: 360px;
-  min-height: 165px;
-  border: 2px dashed rgba(255, 255, 255, 0.55);
-  border-radius: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  align-items: center;
-  justify-items: center;
-  margin: 12px;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.played-slot {
-  min-height: 130px;
+.played-position {
+  min-height: 120px;
+  min-width: 88px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
-.played-slot small {
-  display: block;
-  margin-bottom: 4px;
-  color: #f1f5f9;
-  font-weight: bold;
+.partner-played {
+  margin: 6px auto 0;
 }
 
-.played-slot .real-card {
+.you-played {
+  margin: 0 auto 4px;
+}
+
+.left-played {
+  position: absolute;
+  top: 50%;
+  right: -75px;
+  transform: translateY(-50%);
+}
+
+.right-played {
+  position: absolute;
+  top: 50%;
+  left: -75px;
+  transform: translateY(-50%);
+}
+
+.played-position .real-card {
   margin-left: 0;
-  width: 72px;
-  height: 104px;
+  width: 76px;
+  height: 110px;
+  animation: playedPop 0.25s ease;
+}
+
+.winning-card {
+  outline: 5px solid gold;
+  box-shadow: 0 0 18px gold, 0 8px 14px rgba(0,0,0,0.45);
+  transform: scale(1.08);
+}
+
+@keyframes playedPop {
+  from { transform: scale(0.7); opacity: 0.2; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 button {
@@ -244,6 +277,13 @@ button:hover:not(:disabled) { transform: scale(1.05); }
   .vertical .card-back-img {
     margin-top: 0;
     margin-left: -22px;
+  }
+
+  .left-played,
+  .right-played {
+    position: static;
+    transform: none;
+    margin: 8px auto;
   }
 
   .scoreboard { flex-direction: column; }

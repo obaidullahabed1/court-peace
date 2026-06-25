@@ -115,29 +115,27 @@ function renderCardBacks(elementId, count) {
 }
 
 function renderTableCards() {
-  const table = document.getElementById("tableCards");
+  const playedSlots = {
+    0: document.getElementById("youPlayed"),
+    1: document.getElementById("leftPlayed"),
+    2: document.getElementById("partnerPlayed"),
+    3: document.getElementById("rightPlayed")
+  };
 
-  if (currentTrick.length === 0) {
-    table.innerHTML = "Playing Area";
-    return;
-  }
-
-  table.innerHTML = "";
+  Object.values(playedSlots).forEach(slot => {
+    slot.innerHTML = "";
+  });
 
   currentTrick.forEach(play => {
-    const slot = document.createElement("div");
-    slot.className = "played-slot";
-
-    const label = document.createElement("small");
-    label.innerText = players[play.playerIndex].name;
-
     const img = document.createElement("img");
     img.className = "real-card";
     img.src = play.card.image || getCardImagePath(play.card);
     img.alt = play.card.name;
 
-    slot.appendChild(label);
-    slot.appendChild(img);
-    table.appendChild(slot);
+    if (play.playerIndex === winningCardPlayerIndex) {
+      img.classList.add("winning-card");
+    }
+
+    playedSlots[play.playerIndex].appendChild(img);
   });
 }
