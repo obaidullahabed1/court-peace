@@ -2,13 +2,16 @@
 
 Browser-based Court Peace / Hokm card game.
 
-## Version 0.8
+## Version 1.1
 
+- Dealing animation / deck flash
 - Real SVG card files in `assets/cards/`
 - Counter-clockwise play order
+- Hakim selects trump by clicking one of the first 5 cards
+- Trump selection confirmation
+- Highlight selected trump card
 - Four-player layout
 - Hakim receives 5 cards first
-- Trump selection
 - AI can choose trump when AI is Hakim
 - Full dealing after trump
 - Click-to-play cards

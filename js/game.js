@@ -16,11 +16,6 @@ let lastHandWinnerTeam = null;
 let pendingTrumpCardIndex = null;
 let pendingTrumpSuit = "";
 
-// Counter-clockwise order:
-// 0 = You
-// 3 = Right Opponent
-// 2 = Partner
-// 1 = Left Opponent
 const playOrder = [0, 3, 2, 1];
 
 function nextPlayer(playerIndex) {
@@ -28,19 +23,23 @@ function nextPlayer(playerIndex) {
   return playOrder[(currentPosition + 1) % playOrder.length];
 }
 
-function startGame() {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function startGame() {
   teamAHands = 0;
   teamBHands = 0;
   hakimIndex = 0;
-  startNewHand();
+  await startNewHand();
 }
 
-function startNextHand() {
+async function startNextHand() {
   if (gamePhase !== "handOver") return;
-  startNewHand();
+  await startNewHand();
 }
 
-function startNewHand() {
+async function startNewHand() {
   gameDeck = shuffleDeck(createDeck());
   trumpSuit = "";
   teamATricks = 0;
@@ -49,17 +48,12 @@ function startNewHand() {
   currentTrick = [];
   leadSuit = null;
   handIsOver = false;
-  gamePhase = "selectTrump";
+  gamePhase = "dealing";
   lastHandWinnerTeam = null;
   pendingTrumpCardIndex = null;
   pendingTrumpSuit = "";
 
   resetPlayers();
-
-  for (let i = 0; i < 5; i++) {
-    players[hakimIndex].hand.push(gameDeck.pop());
-  }
-
   clearTrumpButtons();
   updateTrumpDisplay();
   updateScores();
@@ -69,11 +63,44 @@ function startNewHand() {
   renderTableCards();
   renderAllHands();
 
+  updateStatus("Dealing 5 cards to Hakim...");
+  await dealCardsToHakim(5);
+
+  gamePhase = "selectTrump";
+  updateCurrentTurn();
+  renderAllHands();
+
   if (hakimIndex === 0) {
     updateStatus("You are Hakim. Click one of your 5 cards to choose trump.");
   } else {
     updateStatus(players[hakimIndex].name + " is Hakim. AI is choosing trump.");
     setTimeout(autoSelectTrumpForAI, 900);
+  }
+}
+
+async function dealCardsToHakim(count) {
+  for (let i = 0; i < count; i++) {
+    players[hakimIndex].hand.push(gameDeck.pop());
+    flashDeck();
+    renderAllHands();
+    await sleep(170);
+  }
+}
+
+async function dealRemainingCards() {
+  updateStatus("Dealing remaining cards counter-clockwise...");
+
+  while (players.some(player => player.hand.length < 13)) {
+    for (const playerIndex of playOrder) {
+      const player = players[playerIndex];
+
+      if (player.hand.length < 13) {
+        player.hand.push(gameDeck.pop());
+        flashDeck();
+        renderAllHands();
+        await sleep(80);
+      }
+    }
   }
 }
 
@@ -91,7 +118,7 @@ function selectTrumpFromCard(cardIndex) {
   showTrumpConfirmation(pendingTrumpSuit);
 }
 
-function confirmTrumpSelection() {
+async function confirmTrumpSelection() {
   if (!pendingTrumpSuit) return;
 
   const confirmedSuit = pendingTrumpSuit;
@@ -99,7 +126,7 @@ function confirmTrumpSelection() {
   pendingTrumpCardIndex = null;
   pendingTrumpSuit = "";
 
-  selectTrump(confirmedSuit);
+  await selectTrump(confirmedSuit);
 }
 
 function cancelTrumpSelection() {
@@ -132,20 +159,17 @@ function autoSelectTrumpForAI() {
   selectTrump(bestSuit);
 }
 
-function selectTrump(suit) {
+async function selectTrump(suit) {
   if (gamePhase !== "selectTrump") return;
 
   trumpSuit = suit;
+  gamePhase = "dealing";
+  clearTrumpButtons();
+  updateTrumpDisplay();
+  updateStatus("Trump selected: " + trumpSuit + ".");
+  renderAllHands();
 
-  while (players.some(player => player.hand.length < 13)) {
-    for (const playerIndex of playOrder) {
-      const player = players[playerIndex];
-
-      if (player.hand.length < 13) {
-        player.hand.push(gameDeck.pop());
-      }
-    }
-  }
+  await dealRemainingCards();
 
   players.forEach(player => sortPlayerHand(player.hand));
 
@@ -157,7 +181,6 @@ function selectTrump(suit) {
   updateScores();
   updateCurrentTurn();
   updateButtons();
-  clearTrumpButtons();
   renderAllHands();
 
   if (currentPlayerIndex !== 0) {

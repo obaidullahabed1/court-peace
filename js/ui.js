@@ -20,7 +20,7 @@ function updateCurrentTurn() {
 
   if (gamePhase === "handOver") {
     turnElement.innerText = "Hand Over";
-  } else if (gamePhase === "selectTrump") {
+  } else if (gamePhase === "selectTrump" || gamePhase === "dealing") {
     turnElement.innerText = "Hakim: " + players[hakimIndex].name;
   } else {
     turnElement.innerText = "Current Turn: " + players[currentPlayerIndex].name;
@@ -34,10 +34,20 @@ function updateCurrentTurn() {
 
 function updateButtons() {
   document.getElementById("newHandBtn").disabled = gamePhase !== "handOver";
+  document.getElementById("startBtn").disabled = gamePhase === "dealing";
 }
 
 function updateKotDisplay(message) {
   document.getElementById("kotDisplay").innerText = message;
+}
+
+function flashDeck() {
+  const deck = document.querySelector(".deck-card");
+  if (!deck) return;
+
+  deck.classList.remove("deal-flash");
+  void deck.offsetWidth;
+  deck.classList.add("deal-flash");
 }
 
 function showTrumpButtons() {
@@ -73,7 +83,14 @@ function renderPlayerHand() {
     img.src = card.image || getCardImagePath(card);
     img.alt = card.name;
 
-    if (gamePhase === "playing" && currentPlayerIndex === 0 && isLegalPlay(players[0], card)) {
+    if (gamePhase === "selectTrump" && index === pendingTrumpCardIndex) {
+      img.classList.add("selected-trump");
+    }
+
+    if (gamePhase === "selectTrump" && hakimIndex === 0) {
+      img.classList.add("playable");
+      img.onclick = () => selectTrumpFromCard(index);
+    } else if (gamePhase === "playing" && currentPlayerIndex === 0 && isLegalPlay(players[0], card)) {
       img.classList.add("playable");
       img.onclick = () => playHumanCard(index);
     } else if (gamePhase === "playing" && currentPlayerIndex === 0) {

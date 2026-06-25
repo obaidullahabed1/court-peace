@@ -24,16 +24,18 @@ function getCardImagePath(card) {
 
 function createDeck() {
   const deck = [];
+
   for (const suit of suits) {
     for (const rank of ranks) {
       deck.push({
         rank,
         suit,
         name: rank + suit,
-        image: "assets/cards/" + rank + ({ "♠": "S", "♥": "H", "♦": "D", "♣": "C" }[suit]) + ".svg"
+        image: getCardImagePath({ rank, suit })
       });
     }
   }
+
   return deck;
 }
 
@@ -42,5 +44,6 @@ function shuffleDeck(deck) {
     const j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
+
   return deck;
 }

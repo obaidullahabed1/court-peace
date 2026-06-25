@@ -39,10 +39,10 @@ body {
 
 .table-area {
   width: 100%;
-  min-height: 720px;
+  min-height: 740px;
   display: grid;
   grid-template-columns: 240px 1fr 240px;
-  grid-template-rows: 160px 310px 240px;
+  grid-template-rows: 160px 330px 240px;
   grid-template-areas:
     ". partner ."
     "left center right"
@@ -58,7 +58,7 @@ body {
 .you-zone { grid-area: you; }
 
 .center-zone {
-  min-height: 270px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,6 +78,27 @@ body {
   font-size: 20px;
   font-weight: bold;
   color: #ffd166;
+}
+
+.deck-area {
+  min-height: 64px;
+  margin: 4px 0;
+}
+
+.deck-card {
+  width: 48px;
+  height: 70px;
+  border-radius: 8px;
+  box-shadow: 0 7px 14px rgba(0,0,0,0.45);
+}
+
+.deal-flash {
+  animation: dealFlash 0.28s ease;
+}
+
+@keyframes dealFlash {
+  from { transform: translateY(-10px) scale(0.88); opacity: 0.35; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .player-hand {
