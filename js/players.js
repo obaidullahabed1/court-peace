@@ -1,28 +1,8 @@
 const players = [
-  {
-    id: 0,
-    name: "You",
-    team: "A",
-    hand: []
-  },
-  {
-    id: 1,
-    name: "Left Opponent",
-    team: "B",
-    hand: []
-  },
-  {
-    id: 2,
-    name: "Partner",
-    team: "A",
-    hand: []
-  },
-  {
-    id: 3,
-    name: "Right Opponent",
-    team: "B",
-    hand: []
-  }
+  { id: 0, name: "You", team: "A", hand: [] },
+  { id: 1, name: "Left Opponent", team: "B", hand: [] },
+  { id: 2, name: "Partner", team: "A", hand: [] },
+  { id: 3, name: "Right Opponent", team: "B", hand: [] }
 ];
 
 function resetPlayers() {
