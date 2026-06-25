@@ -1,3 +1,87 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: radial-gradient(circle, #16843a, #063d1d);
+  overflow-x: hidden;
+}
+
+.game-table {
+  min-height: 100vh;
+  padding: 14px;
+  text-align: center;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+#status {
+  margin: 6px 0 10px;
+  font-weight: bold;
+}
+
+.scoreboard {
+  max-width: 960px;
+  margin: 0 auto 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-weight: bold;
+}
+
+.table-area {
+  width: 100%;
+  min-height: 720px;
+  display: grid;
+  grid-template-columns: 240px 1fr 240px;
+  grid-template-rows: 160px 310px 240px;
+  grid-template-areas:
+    ". partner ."
+    "left center right"
+    ". you .";
+  gap: 12px;
+  align-items: center;
+}
+
+.partner-zone { grid-area: partner; }
+.left-zone { grid-area: left; }
+.right-zone { grid-area: right; }
+.center-zone { grid-area: center; }
+.you-zone { grid-area: you; }
+
+.center-zone {
+  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-zone h2,
+.player-zone h3 { margin: 5px; }
+
+.active-player {
+  color: #ffe066;
+  text-shadow: 0 0 8px rgba(255, 224, 102, 0.8);
+}
+
+.player-hand {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 18px 10px;
+}
+
 .real-card {
   width: 82px;
   height: 118px;
@@ -6,16 +90,20 @@
   box-shadow: 0 8px 14px rgba(0,0,0,0.45);
   transition: 0.2s ease;
   flex-shrink: 0;
+  background: white;
 }
 
-.real-card:first-child {
-  margin-left: 0;
-}
+.real-card:first-child { margin-left: 0; }
 
-.real-card:hover {
+.real-card.playable:hover {
   transform: translateY(-18px) scale(1.05);
   z-index: 10;
   cursor: pointer;
+}
+
+.real-card.disabled {
+  filter: grayscale(0.8) brightness(0.75);
+  cursor: not-allowed;
 }
 
 .card-back-img {
@@ -27,8 +115,18 @@
   flex-shrink: 0;
 }
 
-.card-back-img:first-child {
-  margin-left: 0;
+.card-back-img:first-child { margin-left: 0; }
+
+.horizontal {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .vertical .card-back-img {
@@ -36,6 +134,77 @@
   margin-top: -52px;
 }
 
-.vertical .card-back-img:first-child {
-  margin-top: 0;
+.vertical .card-back-img:first-child { margin-top: 0; }
+
+.played-cards {
+  width: 360px;
+  min-height: 165px;
+  border: 2px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  justify-items: center;
+  margin: 12px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.played-slot {
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.played-slot small {
+  display: block;
+  margin-bottom: 4px;
+  color: #f1f5f9;
+  font-weight: bold;
+}
+
+.played-slot .real-card {
+  margin-left: 0;
+  width: 72px;
+  height: 104px;
+}
+
+button {
+  padding: 12px 18px;
+  margin: 6px;
+  border: none;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover { transform: scale(1.05); }
+
+@media (max-width: 900px) {
+  .table-area {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "partner"
+      "left"
+      "center"
+      "right"
+      "you";
+  }
+
+  .vertical {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .vertical .card-back-img {
+    margin-top: 0;
+    margin-left: -22px;
+  }
+
+  .scoreboard { flex-direction: column; }
 }
