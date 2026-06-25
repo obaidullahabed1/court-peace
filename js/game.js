@@ -109,7 +109,7 @@ async function dealRemainingCards() {
   }
 }
 
-function selectTrumpFromCard(cardIndex) {
+async function selectTrumpFromCard(cardIndex) {
   if (gamePhase !== "selectTrump") return;
   if (hakimIndex !== 0) return;
 
@@ -118,9 +118,16 @@ function selectTrumpFromCard(cardIndex) {
   pendingTrumpCardIndex = cardIndex;
   pendingTrumpSuit = selectedCard.suit;
 
-  updateStatus("Confirm " + pendingTrumpSuit + " as Hokm?");
+  updateStatus("Hokm selected: " + pendingTrumpSuit + ". Dealing remaining cards...");
+  clearTrumpButtons();
   renderAllHands();
-  showTrumpConfirmation(pendingTrumpSuit);
+
+  const confirmedSuit = pendingTrumpSuit;
+
+  pendingTrumpCardIndex = null;
+  pendingTrumpSuit = "";
+
+  await selectTrump(confirmedSuit);
 }
 
 async function confirmTrumpSelection() {
