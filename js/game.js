@@ -8,6 +8,7 @@ let teamBHands = 0;
 let hakimIndex = 0;
 let currentPlayerIndex = 0;
 let currentTrick = [];
+let trickHistory = [];
 let leadSuit = null;
 let handIsOver = false;
 let gamePhase = "waiting";
@@ -47,6 +48,7 @@ async function startNewHand() {
   teamBTricks = 0;
   currentPlayerIndex = hakimIndex;
   currentTrick = [];
+  trickHistory = [];
   leadSuit = null;
   handIsOver = false;
   gamePhase = "dealing";
@@ -64,6 +66,7 @@ async function startNewHand() {
   updateKotDisplay("");
   renderTableCards();
   renderAllHands();
+  renderHistory();
 
   updateStatus("Dealing 5 cards to Hakim...");
   await dealCardsToHakim(5);
@@ -148,6 +151,7 @@ function autoSelectTrumpForAI() {
 
   hakim.hand.forEach(card => {
     suitCounts[card.suit]++;
+    suitCounts[card.suit] += rankPower[card.rank] >= 11 ? 0.4 : 0;
   });
 
   let bestSuit = "♠";
@@ -224,10 +228,7 @@ function playCard(playerIndex, cardIndex) {
     leadSuit = card.suit;
   }
 
-  currentTrick.push({
-    playerIndex,
-    card
-  });
+  currentTrick.push({ playerIndex, card });
 
   updateStatus(players[playerIndex].name + " played " + card.name);
   renderAllHands();
@@ -258,13 +259,21 @@ function finishTrick() {
   winningCardPlayerIndex = winningPlay.playerIndex;
   renderTableCards();
 
-  setTimeout(() => {
-    if (winningPlayer.team === "A") {
-      teamATricks++;
-    } else {
-      teamBTricks++;
-    }
+  const trickRecord = {
+    winner: winningPlayer.name,
+    winnerTeam: winningPlayer.team,
+    cards: currentTrick.map(play => ({
+      player: players[play.playerIndex].name,
+      card: play.card.name
+    }))
+  };
 
+  setTimeout(() => {
+    if (winningPlayer.team === "A") teamATricks++;
+    else teamBTricks++;
+
+    trickHistory.push(trickRecord);
+    renderHistory();
     updateScores();
     updateStatus(winningPlayer.name + " won the trick.");
 
@@ -323,24 +332,9 @@ function isLegalPlay(player, card) {
 
   const hasLeadSuit = player.hand.some(handCard => handCard.suit === leadSuit);
 
-  if (hasLeadSuit && card.suit !== leadSuit) {
-    return false;
-  }
+  if (hasLeadSuit && card.suit !== leadSuit) return false;
 
   return true;
-}
-
-function chooseAiCardIndex(player) {
-  const legalCards = player.hand
-    .map((card, index) => ({
-      card,
-      index
-    }))
-    .filter(item => isLegalPlay(player, item.card));
-
-  legalCards.sort((a, b) => rankPower[a.card.rank] - rankPower[b.card.rank]);
-
-  return legalCards[0].index;
 }
 
 function endHand() {
@@ -393,27 +387,11 @@ function rotateHakimAfterHand(winningTeam) {
 }
 
 function sortPlayerHand(hand) {
-  const suitOrder = {
-    "♠": 1,
-    "♥": 2,
-    "♦": 3,
-    "♣": 4
-  };
-
+  const suitOrder = { "♠": 1, "♥": 2, "♦": 3, "♣": 4 };
   const rankOrder = {
-    "A": 1,
-    "K": 2,
-    "Q": 3,
-    "J": 4,
-    "10": 5,
-    "9": 6,
-    "8": 7,
-    "7": 8,
-    "6": 9,
-    "5": 10,
-    "4": 11,
-    "3": 12,
-    "2": 13
+    "A": 1, "K": 2, "Q": 3, "J": 4, "10": 5,
+    "9": 6, "8": 7, "7": 8, "6": 9, "5": 10,
+    "4": 11, "3": 12, "2": 13
   };
 
   hand.sort((a, b) => {

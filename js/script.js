@@ -4,3 +4,4 @@ updateScores();
 updateCurrentTurn();
 updateButtons();
 renderTableCards();
+renderHistory();

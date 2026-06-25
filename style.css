@@ -8,21 +8,9 @@ body {
   overflow-x: hidden;
 }
 
-.game-table {
-  min-height: 100vh;
-  padding: 14px;
-  text-align: center;
-}
-
-.top-bar h1 {
-  margin: 0;
-  font-size: 30px;
-}
-
-#status {
-  margin: 6px 0 10px;
-  font-weight: bold;
-}
+.game-table { min-height: 100vh; padding: 14px; text-align: center; }
+.top-bar h1 { margin: 0; font-size: 30px; }
+#status { margin: 6px 0 10px; font-weight: bold; }
 
 .scoreboard {
   max-width: 1120px;
@@ -57,10 +45,7 @@ body {
 .center-zone { grid-area: center; }
 .you-zone { grid-area: you; }
 
-.player-zone {
-  position: relative;
-  min-height: 150px;
-}
+.player-zone { position: relative; min-height: 150px; }
 
 .center-zone {
   min-height: 300px;
@@ -70,8 +55,7 @@ body {
   justify-content: center;
 }
 
-.player-zone h2,
-.player-zone h3 { margin: 5px; }
+.player-zone h2, .player-zone h3 { margin: 5px; }
 
 .active-player {
   color: #ffe066;
@@ -85,10 +69,7 @@ body {
   color: #ffd166;
 }
 
-.deck-area {
-  min-height: 64px;
-  margin: 4px 0;
-}
+.deck-area { min-height: 64px; margin: 4px 0; }
 
 .deck-card {
   width: 48px;
@@ -97,9 +78,7 @@ body {
   box-shadow: 0 7px 14px rgba(0,0,0,0.45);
 }
 
-.deal-flash {
-  animation: dealFlash 0.28s ease;
-}
+.deal-flash { animation: dealFlash 0.28s ease; }
 
 @keyframes dealFlash {
   from { transform: translateY(-10px) scale(0.88); opacity: 0.35; }
@@ -172,11 +151,7 @@ body {
 
 .card-back-img:first-child { margin-left: 0; }
 
-.horizontal {
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
-}
+.horizontal { display: flex; justify-content: center; flex-wrap: nowrap; }
 
 .vertical {
   display: flex;
@@ -184,11 +159,7 @@ body {
   align-items: center;
 }
 
-.vertical .card-back-img {
-  margin-left: 0;
-  margin-top: -52px;
-}
-
+.vertical .card-back-img { margin-left: 0; margin-top: -52px; }
 .vertical .card-back-img:first-child { margin-top: 0; }
 
 .played-position {
@@ -200,13 +171,8 @@ body {
   pointer-events: none;
 }
 
-.partner-played {
-  margin: 6px auto 0;
-}
-
-.you-played {
-  margin: 0 auto 4px;
-}
+.partner-played { margin: 6px auto 0; }
+.you-played { margin: 0 auto 4px; }
 
 .left-played {
   position: absolute;
@@ -240,6 +206,26 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
+.history-panel {
+  max-width: 950px;
+  margin: 10px auto;
+  padding: 10px;
+  background: rgba(0,0,0,0.22);
+  border-radius: 14px;
+  text-align: left;
+}
+
+.history-panel h3 {
+  text-align: center;
+  margin: 4px 0 8px;
+}
+
+.history-item {
+  padding: 6px 10px;
+  border-top: 1px solid rgba(255,255,255,0.16);
+  font-size: 14px;
+}
+
 button {
   padding: 12px 18px;
   margin: 6px;
@@ -250,11 +236,7 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
+button:disabled { opacity: 0.45; cursor: not-allowed; }
 button:hover:not(:disabled) { transform: scale(1.05); }
 
 @media (max-width: 900px) {
@@ -269,18 +251,14 @@ button:hover:not(:disabled) { transform: scale(1.05); }
       "you";
   }
 
-  .vertical {
-    flex-direction: row;
-    justify-content: center;
-  }
+  .vertical { flex-direction: row; justify-content: center; }
 
   .vertical .card-back-img {
     margin-top: 0;
     margin-left: -22px;
   }
 
-  .left-played,
-  .right-played {
+  .left-played, .right-played {
     position: static;
     transform: none;
     margin: 8px auto;

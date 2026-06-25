@@ -8,13 +8,7 @@ const rankPower = {
 };
 
 function getCardFileName(card) {
-  const suitCode = {
-    "♠": "S",
-    "♥": "H",
-    "♦": "D",
-    "♣": "C"
-  };
-
+  const suitCode = { "♠": "S", "♥": "H", "♦": "D", "♣": "C" };
   return card.rank + suitCode[card.suit] + ".svg";
 }
 

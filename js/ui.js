@@ -139,3 +139,23 @@ function renderTableCards() {
     playedSlots[play.playerIndex].appendChild(img);
   });
 }
+
+function renderHistory() {
+  const history = document.getElementById("historyList");
+  if (!history) return;
+
+  if (trickHistory.length === 0) {
+    history.innerText = "No tricks yet.";
+    return;
+  }
+
+  history.innerHTML = "";
+
+  trickHistory.slice().reverse().forEach((trick, index) => {
+    const div = document.createElement("div");
+    div.className = "history-item";
+    const cards = trick.cards.map(item => item.player + ": " + item.card).join(" | ");
+    div.innerText = "Trick " + (trickHistory.length - index) + " — Winner: " + trick.winner + " — " + cards;
+    history.appendChild(div);
+  });
+}
