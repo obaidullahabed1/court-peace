@@ -1,230 +1,41 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: white;
-  background: radial-gradient(circle, #16843a, #063d1d);
-  overflow-x: hidden;
-}
-
-.game-table {
-  min-height: 100vh;
-  padding: 14px;
-  text-align: center;
-}
-
-.top-bar h1 {
-  margin: 0;
-  font-size: 30px;
-}
-
-#status {
-  margin: 6px 0 10px;
-  font-weight: bold;
-}
-
-.scoreboard {
-  max-width: 900px;
-  margin: 0 auto 12px;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  background: rgba(0, 0, 0, 0.28);
-  padding: 12px 18px;
-  border-radius: 16px;
-  font-weight: bold;
-}
-
-.table-area {
-  width: 100%;
-  min-height: 720px;
-  display: grid;
-  grid-template-columns: 240px 1fr 240px;
-  grid-template-rows: 160px 310px 240px;
-  grid-template-areas:
-    ". partner ."
-    "left center right"
-    ". you .";
-  gap: 12px;
-  align-items: center;
-}
-
-.partner-zone { grid-area: partner; }
-.left-zone { grid-area: left; }
-.right-zone { grid-area: right; }
-.center-zone { grid-area: center; }
-.you-zone { grid-area: you; }
-
-.center-zone {
-  min-height: 270px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.player-zone h2,
-.player-zone h3 {
-  margin: 5px;
-}
-
-.player-hand {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  flex-wrap: nowrap;
-  max-width: 100%;
-  overflow-x: auto;
-  padding: 18px 10px;
-}
-
-.card {
-  width: 78px;
-  height: 112px;
-  background: linear-gradient(145deg, #ffffff, #f3f3f3);
-  color: #111;
-  border-radius: 11px;
-  border: 2px solid #e6e6e6;
-  font-size: 24px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.45);
-  flex-shrink: 0;
-  margin-left: -22px;
-  position: relative;
+.real-card {
+  width: 82px;
+  height: 118px;
+  margin-left: -24px;
+  border-radius: 10px;
+  box-shadow: 0 8px 14px rgba(0,0,0,0.45);
   transition: 0.2s ease;
+  flex-shrink: 0;
 }
 
-.card:first-child {
+.real-card:first-child {
   margin-left: 0;
 }
 
-.card::before {
-  content: attr(data-card);
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  font-size: 17px;
-}
-
-.card::after {
-  content: attr(data-card);
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  font-size: 17px;
-  transform: rotate(180deg);
-}
-
-.card.red {
-  color: #c1121f;
-}
-
-.card:hover {
-  transform: translateY(-18px) scale(1.04);
+.real-card:hover {
+  transform: translateY(-18px) scale(1.05);
   z-index: 10;
   cursor: pointer;
 }
 
-.card-back {
+.card-back-img {
   width: 56px;
   height: 82px;
-  border-radius: 9px;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      #123c9c,
-      #123c9c 6px,
-      #0a246a 6px,
-      #0a246a 12px
-    );
-  border: 3px solid white;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.45);
+  margin-left: -22px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.45);
   flex-shrink: 0;
 }
 
-.horizontal {
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
-}
-
-.horizontal .card-back {
-  margin-left: -22px;
-}
-
-.horizontal .card-back:first-child {
+.card-back-img:first-child {
   margin-left: 0;
 }
 
-.vertical {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.vertical .card-back {
+.vertical .card-back-img {
+  margin-left: 0;
   margin-top: -52px;
 }
 
-.vertical .card-back:first-child {
+.vertical .card-back-img:first-child {
   margin-top: 0;
-}
-
-.played-cards {
-  width: 300px;
-  min-height: 135px;
-  border: 2px dashed rgba(255, 255, 255, 0.55);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 12px;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-button {
-  padding: 12px 18px;
-  margin: 6px;
-  border: none;
-  border-radius: 9px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
-
-@media (max-width: 900px) {
-  .table-area {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-      "partner"
-      "left"
-      "center"
-      "right"
-      "you";
-  }
-
-  .vertical {
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .vertical .card-back {
-    margin-top: 0;
-    margin-left: -22px;
-  }
-
-  .scoreboard {
-    flex-direction: column;
-  }
 }
