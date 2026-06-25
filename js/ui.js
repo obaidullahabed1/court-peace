@@ -126,17 +126,35 @@ function renderTableCards() {
     slot.innerHTML = "";
   });
 
+  const centerPile = document.getElementById("centerTrickPile");
+  if (centerPile) {
+    centerPile.innerHTML = currentTrick.length === 0 ? "<span>Court Peace</span>" : "";
+  }
+
   currentTrick.forEach(play => {
-    const img = document.createElement("img");
-    img.className = "real-card";
-    img.src = play.card.image || getCardImagePath(play.card);
-    img.alt = play.card.name;
+    const frontCard = document.createElement("img");
+    frontCard.className = "real-card";
+    frontCard.src = play.card.image || getCardImagePath(play.card);
+    frontCard.alt = play.card.name;
 
     if (play.playerIndex === winningCardPlayerIndex) {
-      img.classList.add("winning-card");
+      frontCard.classList.add("winning-card");
     }
 
-    playedSlots[play.playerIndex].appendChild(img);
+    playedSlots[play.playerIndex].appendChild(frontCard);
+
+    if (centerPile) {
+      const centerCard = document.createElement("img");
+      centerCard.className = "real-card";
+      centerCard.src = play.card.image || getCardImagePath(play.card);
+      centerCard.alt = play.card.name;
+
+      if (play.playerIndex === winningCardPlayerIndex) {
+        centerCard.classList.add("winning-card");
+      }
+
+      centerPile.appendChild(centerCard);
+    }
   });
 }
 

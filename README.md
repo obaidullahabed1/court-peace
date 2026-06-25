@@ -2,8 +2,9 @@
 
 Browser-based Court Peace / Hokm card game.
 
-## Version 1.3.1
+## Version 1.3.2.2
 
+- Played cards also appear in the center trick pile while remaining in front of each player
 - Fix trump selection by making Hakim card click proceed immediately
 - Smarter AI decisions
 - Trick history panel

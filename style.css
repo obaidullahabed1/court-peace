@@ -85,12 +85,15 @@ body {
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
-.center-title {
-  min-width: 220px;
-  min-height: 120px;
+.center-title,
+.center-trick-pile {
+  min-width: 260px;
+  min-height: 135px;
   border: 2px dashed rgba(255,255,255,0.35);
   border-radius: 20px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 58px);
+  gap: 6px;
   align-items: center;
   justify-content: center;
   color: rgba(255,255,255,0.75);
@@ -98,6 +101,23 @@ body {
   font-weight: bold;
   letter-spacing: 1px;
   background: rgba(0,0,0,0.12);
+  padding: 8px;
+}
+
+.center-trick-pile span {
+  grid-column: 1 / -1;
+}
+
+.center-trick-pile .real-card {
+  width: 54px;
+  height: 78px;
+  margin-left: 0;
+  animation: centerPop 0.25s ease;
+}
+
+@keyframes centerPop {
+  from { transform: scale(0.75); opacity: 0.2; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .player-hand {
