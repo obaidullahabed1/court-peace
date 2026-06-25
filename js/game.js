@@ -13,6 +13,14 @@ let handIsOver = false;
 let gamePhase = "waiting";
 let lastHandWinnerTeam = null;
 
+let pendingTrumpCardIndex = null;
+let pendingTrumpSuit = "";
+
+// Counter-clockwise order:
+// 0 = You
+// 3 = Right Opponent
+// 2 = Partner
+// 1 = Left Opponent
 const playOrder = [0, 3, 2, 1];
 
 function nextPlayer(playerIndex) {
@@ -43,6 +51,8 @@ function startNewHand() {
   handIsOver = false;
   gamePhase = "selectTrump";
   lastHandWinnerTeam = null;
+  pendingTrumpCardIndex = null;
+  pendingTrumpSuit = "";
 
   resetPlayers();
 
@@ -72,7 +82,33 @@ function selectTrumpFromCard(cardIndex) {
   if (hakimIndex !== 0) return;
 
   const selectedCard = players[0].hand[cardIndex];
-  selectTrump(selectedCard.suit);
+
+  pendingTrumpCardIndex = cardIndex;
+  pendingTrumpSuit = selectedCard.suit;
+
+  updateStatus("Confirm " + pendingTrumpSuit + " as Hokm?");
+  renderAllHands();
+  showTrumpConfirmation(pendingTrumpSuit);
+}
+
+function confirmTrumpSelection() {
+  if (!pendingTrumpSuit) return;
+
+  const confirmedSuit = pendingTrumpSuit;
+
+  pendingTrumpCardIndex = null;
+  pendingTrumpSuit = "";
+
+  selectTrump(confirmedSuit);
+}
+
+function cancelTrumpSelection() {
+  pendingTrumpCardIndex = null;
+  pendingTrumpSuit = "";
+
+  updateStatus("Choose another card for Hokm.");
+  clearTrumpButtons();
+  renderAllHands();
 }
 
 function autoSelectTrumpForAI() {

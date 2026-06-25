@@ -114,6 +114,12 @@ body {
   cursor: not-allowed;
 }
 
+.selected-trump {
+  outline: 5px solid gold;
+  transform: translateY(-18px) scale(1.06);
+  z-index: 20;
+}
+
 .card-back-img {
   width: 56px;
   height: 82px;

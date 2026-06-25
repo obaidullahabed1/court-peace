@@ -44,6 +44,14 @@ function showTrumpButtons() {
   document.getElementById("trumpButtons").innerHTML = "";
 }
 
+function showTrumpConfirmation(suit) {
+  document.getElementById("trumpButtons").innerHTML = `
+    <h3>Choose ${suit} as Hokm?</h3>
+    <button onclick="confirmTrumpSelection()">Confirm</button>
+    <button onclick="cancelTrumpSelection()">Choose Another</button>
+  `;
+}
+
 function clearTrumpButtons() {
   document.getElementById("trumpButtons").innerHTML = "";
 }
@@ -65,10 +73,7 @@ function renderPlayerHand() {
     img.src = card.image || getCardImagePath(card);
     img.alt = card.name;
 
-    if (gamePhase === "selectTrump" && hakimIndex === 0) {
-      img.classList.add("playable");
-      img.onclick = () => selectTrumpFromCard(index);
-    } else if (gamePhase === "playing" && currentPlayerIndex === 0 && isLegalPlay(players[0], card)) {
+    if (gamePhase === "playing" && currentPlayerIndex === 0 && isLegalPlay(players[0], card)) {
       img.classList.add("playable");
       img.onclick = () => playHumanCard(index);
     } else if (gamePhase === "playing" && currentPlayerIndex === 0) {
