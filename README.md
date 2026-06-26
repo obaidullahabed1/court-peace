@@ -1,9 +1,8 @@
 # Court Peace / Hokm
 
-## Version 2.0
+## Version 2.0.1
 
-- Professional rug-style table layout
-- Played cards close to the center
-- Center panel shows Hokm, Hakim, Dealer, and trick number
-- Team trick piles: face-down, separate, numbered from 1
-- Dealer is player immediately left of Hakim
+- Fixes game stopping when AI/opponent starts the next trick.
+- Safer AI leading/following logic.
+- Stable UI updates using explicit element lookup.
+- Keeps Version 2.0 professional table layout and team trick piles.

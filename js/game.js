@@ -1,1 +1,66 @@
-let gameDeck=[],trumpSuit="",teamATricks=0,teamBTricks=0,teamAHands=0,teamBHands=0,handNumber=1,hakimIndex=0,dealerIndex=1,currentPlayerIndex=0,currentTrick=[],trickHistory=[],teamAPiles=[],teamBPiles=[],leadSuit=null,handIsOver=false,gamePhase="waiting",pendingTrumpCardIndex=null,pendingTrumpSuit="",winningCardPlayerIndex=null;const playOrder=[0,3,2,1];function nextPlayer(i){let p=playOrder.indexOf(i);return playOrder[(p+1)%4]}function playerLeftOf(i){let p=playOrder.indexOf(i);return playOrder[(p-1+4)%4]}function sleep(ms){return new Promise(r=>setTimeout(r,ms))}async function startGame(){teamAHands=0;teamBHands=0;handNumber=1;hakimIndex=0;dealerIndex=playerLeftOf(hakimIndex);await startNewHand()}async function startNextHand(){if(gamePhase!=="handOver")return;handNumber++;await startNewHand()}async function startNewHand(){gameDeck=shuffleDeck(createDeck());trumpSuit="";teamATricks=0;teamBTricks=0;currentPlayerIndex=hakimIndex;currentTrick=[];trickHistory=[];teamAPiles=[];teamBPiles=[];leadSuit=null;handIsOver=false;gamePhase="dealing";pendingTrumpCardIndex=null;pendingTrumpSuit="";winningCardPlayerIndex=null;dealerIndex=playerLeftOf(hakimIndex);resetPlayers();updateAllUI();updateStatus("Dealing 5 cards to Hakim...");for(let i=0;i<5;i++){players[hakimIndex].hand.push(gameDeck.pop());renderAllHands();await sleep(120)}gamePhase="selectTrump";updateAllUI();if(hakimIndex===0)updateStatus("You are Hakim. Click one of your 5 cards to choose trump.");else{updateStatus(players[hakimIndex].name+" is Hakim. AI is choosing trump.");setTimeout(autoSelectTrumpForAI,700)}}async function selectTrumpFromCard(i){if(gamePhase!=="selectTrump"||hakimIndex!==0)return;pendingTrumpCardIndex=i;pendingTrumpSuit=players[0].hand[i].suit;let s=pendingTrumpSuit;pendingTrumpCardIndex=null;pendingTrumpSuit="";await selectTrump(s)}function autoSelectTrumpForAI(){let counts={"♠":0,"♥":0,"♦":0,"♣":0};players[hakimIndex].hand.forEach(c=>counts[c.suit]++);let best="♠";for(const s of suits)if(counts[s]>counts[best])best=s;selectTrump(best)}async function selectTrump(suit){if(gamePhase!=="selectTrump")return;trumpSuit=suit;gamePhase="dealing";updateAllUI();updateStatus("Trump selected: "+trumpSuit+". Dealing remaining cards...");while(players.some(p=>p.hand.length<13)){for(const pi of playOrder){if(players[pi].hand.length<13){players[pi].hand.push(gameDeck.pop());renderAllHands();await sleep(45)}}}players.forEach(p=>sortPlayerHand(p.hand));gamePhase="playing";currentPlayerIndex=hakimIndex;updateAllUI();updateStatus(players[currentPlayerIndex].name+" leads.");if(currentPlayerIndex!==0)setTimeout(playAiTurn,800)}function playHumanCard(i){if(gamePhase!=="playing"||currentPlayerIndex!==0)return;let card=players[0].hand[i];if(!isLegalPlay(players[0],card)){updateStatus("You must follow suit if you have it.");return}playCard(0,i);continueAfterPlay()}function playAiTurn(){if(gamePhase!=="playing"||currentPlayerIndex===0)return;let i=chooseAiCardIndex(players[currentPlayerIndex]);playCard(currentPlayerIndex,i);continueAfterPlay()}function playCard(pi,ci){let card=players[pi].hand.splice(ci,1)[0];if(currentTrick.length===0)leadSuit=card.suit;currentTrick.push({playerIndex:pi,card});updateStatus(players[pi].name+" played "+card.name);updateAllUI()}function continueAfterPlay(){if(currentTrick.length===4){setTimeout(finishTrick,850);return}currentPlayerIndex=nextPlayer(currentPlayerIndex);updateCurrentTurn();if(currentPlayerIndex!==0)setTimeout(playAiTurn,800);else updateStatus("Your turn. Play a card.")}function finishTrick(){let win=getTrickWinner(),wp=players[win.playerIndex];winningCardPlayerIndex=win.playerIndex;renderTableCards();let rec={winner:wp.name,winnerTeam:wp.team,cards:currentTrick.map(p=>({player:players[p.playerIndex].name,card:p.card.name}))};setTimeout(()=>{if(wp.team==="A"){teamATricks++;teamAPiles.push(rec)}else{teamBTricks++;teamBPiles.push(rec)}trickHistory.push(rec);currentPlayerIndex=win.playerIndex;currentTrick=[];leadSuit=null;winningCardPlayerIndex=null;updateAllUI();updateStatus(wp.name+" won the trick.");if(teamATricks>=7||teamBTricks>=7){endHand();return}if(currentPlayerIndex!==0)setTimeout(playAiTurn,1000);else updateStatus("You won the trick. Lead the next card.")},900)}function getTrickWinner(){let w=currentTrick[0];for(const p of currentTrick.slice(1))if(doesCardBeat(p.card,w.card))w=p;return w}function doesCardBeat(c,w){if(c.suit===w.suit)return rankPower[c.rank]>rankPower[w.rank];return c.suit===trumpSuit&&w.suit!==trumpSuit}function isLegalPlay(p,c){if(currentTrick.length===0)return true;let has=p.hand.some(x=>x.suit===leadSuit);return !(has&&c.suit!==leadSuit)}function endHand(){handIsOver=true;gamePhase="handOver";let wt=teamATricks>=7?"A":"B";if(wt==="A")teamAHands++;else teamBHands++;rotateHakimAfterHand(wt);updateAllUI();updateStatus((wt==="A"?"Your team":"Opponent team")+" wins the hand. Click Next Hand.")}function rotateHakimAfterHand(wt){let wins=players.filter(p=>p.team===wt).map(p=>p.id);if(!wins.includes(hakimIndex))hakimIndex=nextPlayer(hakimIndex);dealerIndex=playerLeftOf(hakimIndex)}function sortPlayerHand(h){const so={"♠":1,"♥":2,"♦":3,"♣":4},ro={"A":1,"K":2,"Q":3,"J":4,"10":5,"9":6,"8":7,"7":8,"6":9,"5":10,"4":11,"3":12,"2":13};h.sort((a,b)=>so[a.suit]-so[b.suit]||ro[a.rank]-ro[b.rank])}
+let gameDeck=[],trumpSuit="",teamATricks=0,teamBTricks=0,teamAHands=0,teamBHands=0,handNumber=1,hakimIndex=0,dealerIndex=1,currentPlayerIndex=0,currentTrick=[],trickHistory=[],teamAPiles=[],teamBPiles=[],leadSuit=null,handIsOver=false,gamePhase="waiting",pendingTrumpCardIndex=null,pendingTrumpSuit="",winningCardPlayerIndex=null;const playOrder=[0,3,2,1];function nextPlayer(i){let p=playOrder.indexOf(i);return playOrder[(p+1)%4]}function playerLeftOf(i){let p=playOrder.indexOf(i);return playOrder[(p-1+4)%4]}function sleep(ms){return new Promise(r=>setTimeout(r,ms))}async function startGame(){teamAHands=0;teamBHands=0;handNumber=1;hakimIndex=0;dealerIndex=playerLeftOf(hakimIndex);await startNewHand()}async function startNextHand(){if(gamePhase!=="handOver")return;handNumber++;await startNewHand()}async function startNewHand(){gameDeck=shuffleDeck(createDeck());trumpSuit="";teamATricks=0;teamBTricks=0;currentPlayerIndex=hakimIndex;currentTrick=[];trickHistory=[];teamAPiles=[];teamBPiles=[];leadSuit=null;handIsOver=false;gamePhase="dealing";pendingTrumpCardIndex=null;pendingTrumpSuit="";winningCardPlayerIndex=null;dealerIndex=playerLeftOf(hakimIndex);resetPlayers();updateAllUI();updateStatus("Dealing 5 cards to Hakim...");for(let i=0;i<5;i++){players[hakimIndex].hand.push(gameDeck.pop());renderAllHands();await sleep(120)}gamePhase="selectTrump";updateAllUI();if(hakimIndex===0)updateStatus("You are Hakim. Click one of your 5 cards to choose trump.");else{updateStatus(players[hakimIndex].name+" is Hakim. AI is choosing trump.");setTimeout(autoSelectTrumpForAI,700)}}async function selectTrumpFromCard(i){if(gamePhase!=="selectTrump"||hakimIndex!==0)return;pendingTrumpCardIndex=i;pendingTrumpSuit=players[0].hand[i].suit;let s=pendingTrumpSuit;pendingTrumpCardIndex=null;pendingTrumpSuit="";await selectTrump(s)}function autoSelectTrumpForAI(){let counts={"♠":0,"♥":0,"♦":0,"♣":0};players[hakimIndex].hand.forEach(c=>counts[c.suit]++);let best="♠";for(const s of suits)if(counts[s]>counts[best])best=s;selectTrump(best)}async function selectTrump(suit){if(gamePhase!=="selectTrump")return;trumpSuit=suit;gamePhase="dealing";updateAllUI();updateStatus("Trump selected: "+trumpSuit+". Dealing remaining cards...");while(players.some(p=>p.hand.length<13)){for(const pi of playOrder){if(players[pi].hand.length<13){players[pi].hand.push(gameDeck.pop());renderAllHands();await sleep(45)}}}players.forEach(p=>sortPlayerHand(p.hand));gamePhase="playing";currentPlayerIndex=hakimIndex;updateAllUI();updateStatus(players[currentPlayerIndex].name+" leads.");if(currentPlayerIndex!==0)setTimeout(playAiTurn,800)}function playHumanCard(i){if(gamePhase!=="playing"||currentPlayerIndex!==0)return;let card=players[0].hand[i];if(!isLegalPlay(players[0],card)){updateStatus("You must follow suit if you have it.");return}playCard(0,i);continueAfterPlay()}function playAiTurn(){if(gamePhase!=="playing"||currentPlayerIndex===0)return;let i=chooseAiCardIndex(players[currentPlayerIndex]);playCard(currentPlayerIndex,i);continueAfterPlay()}function playCard(pi,ci){let card=players[pi].hand.splice(ci,1)[0];if(currentTrick.length===0)leadSuit=card.suit;currentTrick.push({playerIndex:pi,card});updateStatus(players[pi].name+" played "+card.name);updateAllUI()}function continueAfterPlay() {
+  if (currentTrick.length === 4) {
+    setTimeout(finishTrick, 850);
+    return;
+  }
+
+  currentPlayerIndex = nextPlayer(currentPlayerIndex);
+  updateAllUI();
+
+  if (currentPlayerIndex !== 0) {
+    setTimeout(playAiTurn, 800);
+  } else {
+    updateStatus("Your turn. Play a card.");
+  }
+}
+
+function finishTrick() {
+  if (currentTrick.length !== 4) return;
+
+  const winningPlay = getTrickWinner();
+  const winningPlayer = players[winningPlay.playerIndex];
+
+  winningCardPlayerIndex = winningPlay.playerIndex;
+  renderTableCards();
+
+  const trickRecord = {
+    winner: winningPlayer.name,
+    winnerTeam: winningPlayer.team,
+    cards: currentTrick.map(play => ({
+      player: players[play.playerIndex].name,
+      card: play.card.name
+    }))
+  };
+
+  setTimeout(() => {
+    if (winningPlayer.team === "A") {
+      teamATricks++;
+      teamAPiles.push(trickRecord);
+    } else {
+      teamBTricks++;
+      teamBPiles.push(trickRecord);
+    }
+
+    trickHistory.push(trickRecord);
+    currentPlayerIndex = winningPlay.playerIndex;
+    currentTrick = [];
+    leadSuit = null;
+    winningCardPlayerIndex = null;
+
+    updateAllUI();
+    updateStatus(winningPlayer.name + " won the trick.");
+
+    if (teamATricks >= 7 || teamBTricks >= 7) {
+      endHand();
+      return;
+    }
+
+    if (currentPlayerIndex !== 0) {
+      setTimeout(playAiTurn, 1000);
+    } else {
+      updateStatus("You won the trick. Lead the next card.");
+    }
+  }, 900);
+}
+
+function getTrickWinner(){let w=currentTrick[0];for(const p of currentTrick.slice(1))if(doesCardBeat(p.card,w.card))w=p;return w}function doesCardBeat(c,w){if(c.suit===w.suit)return rankPower[c.rank]>rankPower[w.rank];return c.suit===trumpSuit&&w.suit!==trumpSuit}function isLegalPlay(p,c){if(currentTrick.length===0)return true;let has=p.hand.some(x=>x.suit===leadSuit);return !(has&&c.suit!==leadSuit)}function endHand(){handIsOver=true;gamePhase="handOver";let wt=teamATricks>=7?"A":"B";if(wt==="A")teamAHands++;else teamBHands++;rotateHakimAfterHand(wt);updateAllUI();updateStatus((wt==="A"?"Your team":"Opponent team")+" wins the hand. Click Next Hand.")}function rotateHakimAfterHand(wt){let wins=players.filter(p=>p.team===wt).map(p=>p.id);if(!wins.includes(hakimIndex))hakimIndex=nextPlayer(hakimIndex);dealerIndex=playerLeftOf(hakimIndex)}function sortPlayerHand(h){const so={"♠":1,"♥":2,"♦":3,"♣":4},ro={"A":1,"K":2,"Q":3,"J":4,"10":5,"9":6,"8":7,"7":8,"6":9,"5":10,"4":11,"3":12,"2":13};h.sort((a,b)=>so[a.suit]-so[b.suit]||ro[a.rank]-ro[b.rank])}
