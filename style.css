@@ -111,3 +111,121 @@
     margin: 10px auto;
   }
 }
+
+
+/* Version 3.1 — agreed layout refinements */
+
+/* Keep played/tricked cards very close to the center circle */
+.partner-played {
+  top: 188px;
+}
+
+.you-played {
+  bottom: 276px;
+}
+
+.left-played {
+  left: calc(50% - 162px);
+}
+
+.right-played {
+  right: calc(50% - 162px);
+}
+
+.played-slot .card,
+.played .card {
+  width: 72px;
+  height: 104px;
+}
+
+/* Move won tricks further to the front, directly above the hand area */
+.your-stack {
+  left: 300px;
+  bottom: 18px;
+  width: 330px;
+}
+
+.opponent-stack {
+  right: 28px;
+  bottom: 18px;
+  top: auto;
+  width: 330px;
+}
+
+/* Make won tricks look like separate face-down stacks, numbered from 1 */
+.pile-list {
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.trick-pile {
+  width: 54px;
+  height: 78px;
+}
+
+.trick-pile img {
+  width: 52px;
+  height: 74px;
+}
+
+.trick-number {
+  right: 11px;
+  bottom: 15px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #ffd166;
+  border: 2px solid #d6a84f;
+}
+
+/* Put the user's hand slightly lower so won tricks sit in front */
+.you-zone {
+  bottom: -2px;
+}
+
+.player-hand {
+  padding-top: 24px;
+}
+
+/* Keep the center circle clean and only for game info */
+.center-panel {
+  top: 46%;
+}
+
+.center-hokm {
+  width: 225px;
+  height: 225px;
+  min-height: 225px;
+}
+
+.trump-display {
+  font-size: 26px;
+}
+
+/* Stronger current player glow */
+.active-player h2,
+.active-player h3,
+.active-player {
+  box-shadow: 0 0 16px rgba(255, 214, 102, 0.75);
+  border-radius: 12px;
+}
+
+/* Cleaner front labels */
+.team-trick-stack h4 {
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.your-stack h4 {
+  color: #67e85f;
+}
+
+.opponent-stack h4 {
+  color: #ef4444;
+}
+
+/* reduce bottom history visual weight */
+.history-panel {
+  max-height: 120px;
+  overflow-y: auto;
+}
