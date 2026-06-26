@@ -1,13 +1,17 @@
 # Court Peace / Hokm
 
-## Version 3.1
+## Version 3.2
 
-Changes from our discussion:
+Implements the latest mockup changes:
 
-- Won trick stacks are brought to the front/bottom area.
-- Won tricks sit directly above the hand area like the sketch.
-- Played/tricked cards are moved closer to the center circle.
-- Center circle stays clean and only shows Hokm, Hakim, Dealer, Hand, and Trick info.
-- Each won trick remains face-down and numbered starting from 1.
-- Current player highlight is stronger with a gold glow.
-- v3.0 sketch layout and v2.0.1 AI-leading fix are preserved.
+- Persian rug table and wooden border are preserved.
+- Left information panel is preserved.
+- Center circular Hokm display stays uncluttered.
+- Played/tricked cards are closer to the center, just outside the circle.
+- Won trick piles are moved to the front area.
+- Won tricks are arranged vertically, face-down, and numbered from 1.
+- Dealer D and Hakim crown remain visible in player labels and center info.
+- Current player highlight uses a stronger gold glow.
+- Card spacing is tightened so 13 cards fit better.
+- Responsive scaling is improved for smaller screens.
+- v2.0.1 AI-leading fix remains included.

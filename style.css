@@ -229,3 +229,203 @@
   max-height: 120px;
   overflow-y: auto;
 }
+
+
+/* Version 3.2 — polished mockup changes */
+
+/* Rug table / wooden frame feel */
+.table {
+  min-height: 820px;
+  border-width: 12px;
+  border-color: rgba(130, 75, 32, 0.95);
+  box-shadow:
+    inset 0 0 70px rgba(0,0,0,0.62),
+    0 12px 34px rgba(0,0,0,0.48);
+}
+
+/* Keep played cards close to the center circle, but not overlapping it */
+.partner-played {
+  top: 178px;
+}
+
+.you-played {
+  bottom: 292px;
+}
+
+.left-played {
+  left: calc(50% - 150px);
+}
+
+.right-played {
+  right: calc(50% - 150px);
+}
+
+.played-slot .card,
+.played .card {
+  width: 70px;
+  height: 101px;
+}
+
+/* Cleaner, uncluttered center circle */
+.center-panel {
+  top: 45.5%;
+}
+
+.center-hokm {
+  width: 235px;
+  height: 235px;
+  min-height: 235px;
+  background: rgba(0, 0, 0, 0.78);
+  border: 2px solid rgba(255, 196, 75, 0.95);
+}
+
+.center-hokm .small-label,
+.center-hokm span {
+  letter-spacing: 0.6px;
+}
+
+/* Won tricks now sit in the front area, like the reference mockup */
+.your-stack {
+  left: 25px;
+  bottom: 60px;
+  width: 150px;
+  min-height: 270px;
+}
+
+.opponent-stack {
+  right: 25px;
+  bottom: 60px;
+  top: auto;
+  width: 150px;
+  min-height: 270px;
+}
+
+.team-trick-stack {
+  background: rgba(0, 17, 9, 0.78);
+  border: 1px solid rgba(255, 196, 75, 0.78);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.38);
+}
+
+.team-trick-stack h4 {
+  text-transform: uppercase;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+}
+
+/* Arrange won tricks vertically, each as a separate face-down stack */
+.pile-list {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 11px;
+}
+
+.trick-pile {
+  width: 78px;
+  height: 50px;
+  margin: 0 auto;
+}
+
+.trick-pile img {
+  width: 62px;
+  height: 44px;
+  object-fit: cover;
+}
+
+.trick-pile img:nth-child(1) { left: 0; top: 0; }
+.trick-pile img:nth-child(2) { left: 5px; top: 2px; }
+.trick-pile img:nth-child(3) { left: 10px; top: 4px; }
+.trick-pile img:nth-child(4) { left: 15px; top: 6px; }
+
+.trick-number {
+  right: 20px;
+  bottom: 7px;
+  width: 27px;
+  height: 27px;
+  font-size: 15px;
+  background: rgba(0, 0, 0, 0.92);
+  border: 2px solid #d6a84f;
+  color: #ffd166;
+}
+
+.total-box {
+  margin-top: 16px;
+  font-size: 18px;
+}
+
+/* Bring your hand into a cleaner fan and reduce spacing for 13 cards */
+.you-zone {
+  bottom: 8px;
+}
+
+.player-hand {
+  max-width: 850px;
+  padding-bottom: 2px;
+}
+
+.hand .card,
+.player-hand .card {
+  margin-left: -28px;
+}
+
+.hand .card:first-child,
+.player-hand .card:first-child {
+  margin-left: 0;
+}
+
+/* Stronger markers/highlight */
+.active-player h2,
+.active-player h3,
+.active-player {
+  box-shadow: 0 0 18px rgba(255, 214, 102, 0.85);
+  border-radius: 12px;
+}
+
+#youLabel,
+#partnerLabel,
+#leftLabel,
+#rightLabel {
+  border-color: rgba(255, 196, 75, 0.85);
+}
+
+/* Side players slightly tighter, similar to the mockup */
+.left-zone {
+  top: 270px;
+  left: 48px;
+}
+
+.right-zone {
+  top: 270px;
+  right: 48px;
+}
+
+.partner-zone {
+  top: 6px;
+}
+
+/* Responsive scaling: prevent overlap on smaller screens */
+@media (max-width: 1100px) {
+  .app-shell,
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .side-panel,
+  .score {
+    max-width: 95vw;
+    margin: 0 auto;
+  }
+
+  .table {
+    transform: scale(0.92);
+    transform-origin: top center;
+    margin-bottom: -55px;
+  }
+}
+
+@media (max-width: 850px) {
+  .table {
+    transform: scale(0.78);
+    margin-bottom: -150px;
+  }
+}
